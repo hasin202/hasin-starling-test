@@ -20,7 +20,12 @@ const initialState: UserInfo = {
 export const userInfoSlice = createSlice({
   name: "userInfo",
   initialState,
-  reducers: {},
+  reducers: {
+    //dev reducer to display blocking error alert. Using redux chrome extension dispatch: userInfo/Account
+    accountErr: (state) => {
+      state.accountUidError = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAccountUid.pending, (state) => {
@@ -36,6 +41,7 @@ export const userInfoSlice = createSlice({
       )
       .addCase(getAccountUid.rejected, (state) => {
         state.accountUidLoading = false;
+        state.accountUidError = true;
       });
   },
 });
