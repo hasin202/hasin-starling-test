@@ -1,6 +1,10 @@
 import axios from "axios";
 import { NextApiResponse } from "next";
 
+export type TApiError = {
+  message: string;
+};
+
 //Function to handle errors for API endpoints.
 //If the error has a status code return the error with the same code, if not return it with 500
 //Allow the api to pass a message to specifiy where the error occurred.
