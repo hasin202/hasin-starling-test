@@ -2,7 +2,7 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { starling } from "./helpers/starling-instance";
-import { handleError } from "./helpers/handle-error";
+import { TApiError, handleError } from "./helpers/handle-error";
 
 type AccountInfo = {
   accountUid: string;
@@ -19,7 +19,7 @@ type AccountRes = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<string | TApiError>
 ) {
   try {
     //if the access token isnt set in the env then throw an error
