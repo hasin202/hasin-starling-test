@@ -47,17 +47,18 @@ export const userInfoSlice = createSlice({
 });
 
 //using a thunk to store user info is useful because thunks provide extra functionality like loading and error.
-export const getAccountUid = createAsyncThunk(
-  "userInfo/accountUid",
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data: response } = await axios.get<string>("/api/account-uid");
-      return response;
-    } catch (error) {
-      return rejectWithValue("failed to get user info.");
-    }
+export const getAccountUid = createAsyncThunk<
+  string,
+  void,
+  { rejectValue: string }
+>("userInfo/accountUid", async (_, { rejectWithValue }) => {
+  try {
+    const { data: response } = await axios.get<string>("/api/account-uid");
+    return response;
+  } catch (error) {
+    return rejectWithValue("failed to get user info.");
   }
-);
+});
 
 export const {} = userInfoSlice.actions;
 
