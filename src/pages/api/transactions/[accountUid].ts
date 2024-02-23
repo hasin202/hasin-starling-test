@@ -44,7 +44,6 @@ export default async function handler(
     //with the request on the front end need to pass the parameter accountUid.
     //in the form /api/balance?accountUid=${accountUid}
     const { accountUid, minTimeStamp, maxTimeStamp } = req.query;
-    console.log(maxTimeStamp);
     const { data: response } = await starling<StarlingApiTransactionResponse>(
       `/feed/account/${accountUid}/settled-transactions-between?minTransactionTimestamp=${minTimeStamp}&maxTransactionTimestamp=${maxTimeStamp}`
     );
