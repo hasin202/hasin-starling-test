@@ -1,4 +1,4 @@
-import { BalanceItem } from "@/pages/api/balance";
+import { BalanceItem } from "@/pages/api/balance/[accountUid]";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -90,7 +90,7 @@ export const getBalance = createAsyncThunk<
 >("userInfo/balance", async (accountUid, { rejectWithValue }) => {
   try {
     const { data: response } = await axios.get<BalanceItem>(
-      `/api/balance?accountUid=${accountUid}`
+      `/api/balance/${accountUid}`
     );
     return response;
   } catch (error) {
