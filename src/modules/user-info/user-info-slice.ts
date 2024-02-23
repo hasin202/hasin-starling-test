@@ -3,24 +3,27 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { getTransactions } from "../transactions/transactions-slice";
 import axios from "axios";
+import formatBalance from "./helpers/format-balance";
 
 //user info type
 export type UserInfo = {
+  //set loading states to true by default so skeleton loaders are shown straight away
   accountUid: string;
   accountUidLoading: boolean;
   accountUidError: boolean;
   currency: string;
-  balance: number;
+  balance: string;
   balanceLoading: boolean;
+  //dont need balance error because it will be set in the global error slice.
 };
 
 const initialState: UserInfo = {
   accountUid: "",
-  accountUidLoading: false,
+  accountUidLoading: true,
   accountUidError: false,
   currency: "USD",
-  balance: 0.0,
-  balanceLoading: false,
+  balance: "$0.00",
+  balanceLoading: true,
 };
 
 export const userInfoSlice = createSlice({
@@ -34,9 +37,6 @@ export const userInfoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAccountUid.pending, (state) => {
-        state.accountUidLoading = true;
-      })
       .addCase(
         getAccountUid.fulfilled,
         (state, action: PayloadAction<string>) => {
@@ -45,25 +45,24 @@ export const userInfoSlice = createSlice({
         }
       )
       .addCase(getAccountUid.rejected, (state) => {
-        state.accountUidLoading = false;
         state.accountUidError = true;
-      })
-      .addCase(getBalance.pending, (state) => {
-        state.balanceLoading = true;
       })
       .addCase(
         getBalance.fulfilled,
         (state, action: PayloadAction<BalanceItem>) => {
           state.currency = action.payload.currency;
-          state.balance = action.payload.minorUnits / 100;
+          state.balance = formatBalance(
+            action.payload.minorUnits,
+            action.payload.currency
+          );
           state.balanceLoading = false;
         }
-      )
-      .addCase(getBalance.rejected, (state) => {
-        //toast logic here!
-        //might not need to set loading state to false if the
-        state.balanceLoading = false;
-      });
+      );
+    // .addCase(getBalance.rejected, (state) => {
+    //   // //toast logic here!
+    //   // //might not need to set loading state to false if the
+    //   // state.balanceLoading = false;
+    // });
   },
 });
 
