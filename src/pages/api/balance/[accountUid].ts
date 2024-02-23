@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { starling } from "./helpers/starling-instance";
-import { TApiError, handleError } from "./helpers/handle-error";
+import { starling } from "../helpers/starling-instance";
+import { TApiError, handleError } from "../helpers/handle-error";
 
 export type BalanceItem = {
   currency: string;
