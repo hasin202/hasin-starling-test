@@ -1,9 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { starling } from "./helpers/starling-instance";
-import { TApiError, handleError } from "./helpers/handle-error";
-import { BalanceItem } from "./balance";
+import { starling } from "../helpers/starling-instance";
+import { TApiError, handleError } from "../helpers/handle-error";
+import { BalanceItem } from "../balance/[accountUid]";
 
 export type FeedItem = {
   feedItemUid: string;
