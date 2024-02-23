@@ -8,8 +8,6 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getAccountUid());
-    const a = localStorage.getItem("accountUid");
-    console.log(a);
   }, []);
   return (
     <main
