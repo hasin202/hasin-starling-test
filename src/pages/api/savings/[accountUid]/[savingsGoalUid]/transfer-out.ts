@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { starling } from "../../../helpers/starling-instance";
 import { TApiError, handleError } from "../../../helpers/handle-error";
 import { v4 as uuidv4 } from "uuid";
+import { BalanceItem } from "@/pages/api/balance/[accountUid]";
 
 type StarlingApiSavingsPutResponse = {
   transferUid?: string;
@@ -18,7 +19,7 @@ export default async function handler(
 ) {
   try {
     const { accountUid, savingsGoalUid } = req.query;
-    const body = req.body;
+    const body: BalanceItem = req.body;
     const savingsBaseUrl = `/account/${accountUid}`;
 
     //transfer to a savings goal
@@ -36,7 +37,7 @@ export default async function handler(
       const { data: response } =
         await starling.put<StarlingApiSavingsPutResponse>(
           `${savingsBaseUrl}/savings-goals/${savingsGoalUid}/withdraw-money/${transferUid}`,
-          body
+          { amount: body }
         );
       return res.status(200).json(response.success);
     }
