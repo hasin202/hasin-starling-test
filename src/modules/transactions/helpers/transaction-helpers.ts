@@ -1,4 +1,3 @@
-import formatBalance from "@/modules/user-info/helpers/format-balance";
 import { FeedItem } from "@/pages/api/transactions/[accountUid]";
 
 export const individualRoundUp = (amount: number) => {

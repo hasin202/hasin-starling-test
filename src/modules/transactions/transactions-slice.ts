@@ -4,7 +4,6 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { calculateTotalRoundUpAmount } from "./helpers/transaction-helpers";
 
-//user info type
 export type TransactionsInfo = {
   feedItems: FeedItem[];
   transactionsLoading: boolean;
