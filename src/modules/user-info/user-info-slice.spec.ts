@@ -84,12 +84,11 @@ describe("balance Thunk", () => {
     mockAxios = new MockAdapter(axios);
   });
 
-  it("should not set balance state and leave loading state as true if the api throws an error", async () => {
+  it("should not set balance state if the api throws an error", async () => {
     mockAxios.onGet(`/api/balance/${accountUid}`).reply(400, "oops");
 
     await store.dispatch(getBalance(accountUid));
     expect(store.getState().userInfo.balance).toBe("$0.00");
-    expect(store.getState().userInfo.balanceLoading).toBe(true);
   });
 
   it("should leave loading state as true if the api throws an error", async () => {
@@ -99,14 +98,13 @@ describe("balance Thunk", () => {
     expect(store.getState().userInfo.balanceLoading).toBe(true);
   });
 
-  it("should set balance state and loading to false if the api response is ok", async () => {
+  it("should set balance state if the api response is ok", async () => {
     mockAxios
       .onGet(`/api/balance/${accountUid}`)
       .reply(200, { currency: "GBP", minorUnits: 1234 });
 
     await store.dispatch(getBalance(accountUid));
     expect(store.getState().userInfo.balance).toBe("£12.34");
-    expect(store.getState().userInfo.balanceLoading).toBe(false);
   });
 
   it("should set loading to false if the api response is ok", async () => {

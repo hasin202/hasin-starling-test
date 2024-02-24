@@ -2,16 +2,19 @@ import { FeedItem } from "@/pages/api/transactions/[accountUid]";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { calculateTotalRoundUpAmount } from "./helpers/transaction-helpers";
 
 //user info type
 export type TransactionsInfo = {
   feedItems: FeedItem[];
   transactionsLoading: boolean;
+  roundUpAmount: number;
 };
 
 const initialState: TransactionsInfo = {
   feedItems: [],
   transactionsLoading: true,
+  roundUpAmount: 0,
 };
 
 export const transactionInfoSlice = createSlice({
@@ -23,6 +26,7 @@ export const transactionInfoSlice = createSlice({
       getTransactions.fulfilled,
       (state, action: PayloadAction<FeedItem[]>) => {
         state.feedItems = action.payload;
+        state.roundUpAmount = calculateTotalRoundUpAmount(state.feedItems);
         state.transactionsLoading = false;
       }
     );

@@ -16,11 +16,14 @@ export type FeedItem = {
   settlementTime: string;
   source: string;
   status: string;
-  counterPartyType: string;
-  counterPartyName: string;
-  counterPartySubEntityName: string;
-  counterPartySubEntityIdentifier: string;
-  counterPartySubEntitySubIdentifier: string;
+  counterPartyType?: string;
+  transactingApplicationUserUid?: string;
+  counterPartyName?: string;
+  counterPartyUid?: string;
+  counterPartySubEntityUid?: string;
+  counterPartySubEntityName?: string;
+  counterPartySubEntityIdentifier?: string;
+  counterPartySubEntitySubIdentifier?: string;
   reference: string;
   country: string;
   spendingCategory: string;
@@ -44,7 +47,6 @@ export default async function handler(
     //with the request on the front end need to pass the parameter accountUid.
     //in the form /api/balance?accountUid=${accountUid}
     const { accountUid, minTimeStamp, maxTimeStamp } = req.query;
-    console.log(maxTimeStamp);
     const { data: response } = await starling<StarlingApiTransactionResponse>(
       `/feed/account/${accountUid}/settled-transactions-between?minTransactionTimestamp=${minTimeStamp}&maxTransactionTimestamp=${maxTimeStamp}`
     );
