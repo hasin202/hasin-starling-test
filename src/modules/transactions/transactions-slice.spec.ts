@@ -3,7 +3,6 @@ import axios from "axios";
 import { getTransactions } from "./transactions-slice";
 import { testStore } from "@/redux/testStore";
 import { mockFeedItems } from "./helpers/mocks";
-import { calculateTotalRoundUpAmount } from "./helpers/transaction-helpers";
 
 const initialState = {
   feedItems: [],
