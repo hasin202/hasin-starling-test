@@ -1,6 +1,11 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
-import { getAccountUid, getBalance } from "./user-info-slice";
+import {
+  addBalance,
+  getAccountUid,
+  getBalance,
+  removeBalance,
+} from "./user-info-slice";
 import { AppStore, createTestStore } from "@/redux/testStore";
 
 const initialState = {
@@ -26,6 +31,16 @@ describe("accountUid reducer", () => {
   it("should set accountUidError to true on dispatch of userInfo/accountErr", () => {
     store.dispatch({ type: "userInfo/accountErr" });
     expect(store.getState().userInfo.accountUidError).toBe(true);
+  });
+
+  it("should add the correct value to the balance", () => {
+    store.dispatch(addBalance(100));
+    expect(store.getState().userInfo.balance).toBe(100);
+  });
+
+  it("should remove the correct value to the balance", () => {
+    store.dispatch(removeBalance(100));
+    expect(store.getState().userInfo.balance).toBe(-100);
   });
 });
 

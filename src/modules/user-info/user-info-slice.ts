@@ -34,6 +34,12 @@ export const userInfoSlice = createSlice({
     accountErr: (state) => {
       state.accountUidError = true;
     },
+    addBalance: (state, action: PayloadAction<number>) => {
+      state.balance = state.balance + action.payload;
+    },
+    removeBalance: (state, action: PayloadAction<number>) => {
+      state.balance = state.balance - action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -97,6 +103,6 @@ export const getBalance = createAsyncThunk<
   }
 });
 
-export const {} = userInfoSlice.actions;
+export const { addBalance, removeBalance } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;
