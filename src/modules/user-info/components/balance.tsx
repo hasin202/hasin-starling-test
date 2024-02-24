@@ -8,9 +8,11 @@ const Balance = () => {
     (state: RootState) => state.userInfo
   );
 
-  return balanceLoading ? (
-    <BalanceSkeleton />
-  ) : (
+  if (balanceLoading) {
+    return <BalanceSkeleton />;
+  }
+
+  return (
     <div className="w-full px-2 py-4 flex flex-col items-center gap-2">
       <h1 className="font-light text-slate-300">Your Balance</h1>
       <h2 className="font-bold text-4xl">{formatBalance(balance, currency)}</h2>
