@@ -57,8 +57,8 @@ export const userInfoSlice = createSlice({
         getBalance.fulfilled,
         (state, action: PayloadAction<BalanceItem>) => {
           state.currency = action.payload.currency;
-          (state.balance = action.payload.minorUnits),
-            (state.balanceLoading = false);
+          state.balance = action.payload.minorUnits;
+          state.balanceLoading = false;
         }
       );
     // .addCase(getBalance.rejected, (state) => {
