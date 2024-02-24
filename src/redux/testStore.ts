@@ -3,6 +3,9 @@ import { reducers } from "./store";
 
 const rootReducer = combineReducers(reducers);
 
-export const testStore = configureStore({
-  reducer: rootReducer,
-});
+export const createTestStore = () =>
+  configureStore({
+    reducer: rootReducer,
+  });
+
+export type AppStore = ReturnType<typeof createTestStore>;

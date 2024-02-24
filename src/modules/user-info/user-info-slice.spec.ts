@@ -1,7 +1,7 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { getAccountUid, getBalance } from "./user-info-slice";
-import { testStore } from "@/redux/testStore";
+import { AppStore, createTestStore } from "@/redux/testStore";
 
 const initialState = {
   accountUid: "",
@@ -13,10 +13,10 @@ const initialState = {
 };
 
 describe("accountUid reducer", () => {
-  let store: typeof testStore;
+  let store: AppStore;
 
   beforeEach(() => {
-    store = testStore;
+    store = createTestStore();
   });
 
   it("should set the initial state properly", () => {
@@ -30,11 +30,11 @@ describe("accountUid reducer", () => {
 });
 
 describe("accountUid Thunk", () => {
-  let store: typeof testStore;
+  let store: AppStore;
   let mockAxios: MockAdapter;
   beforeEach(() => {
     //setup store and a mock axios instance before each test
-    store = testStore;
+    store = createTestStore();
     mockAxios = new MockAdapter(axios);
   });
 
@@ -57,11 +57,11 @@ describe("accountUid Thunk", () => {
 });
 
 describe("balance Thunk", () => {
-  let store: typeof testStore;
+  let store: AppStore;
   let mockAxios: MockAdapter;
   const accountUid = "uid";
   beforeEach(() => {
-    store = testStore;
+    store = createTestStore();
     mockAxios = new MockAdapter(axios);
   });
 

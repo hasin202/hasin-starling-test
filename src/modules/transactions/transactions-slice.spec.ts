@@ -1,7 +1,7 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { getTransactions } from "./transactions-slice";
-import { testStore } from "@/redux/testStore";
+import { AppStore, createTestStore } from "@/redux/testStore";
 import { mockFeedItems } from "./helpers/mocks";
 
 const initialState = {
@@ -11,14 +11,14 @@ const initialState = {
 };
 
 describe("transactions slice", () => {
-  let store: typeof testStore;
+  let store: AppStore;
   let mockAxios: MockAdapter;
 
   const accountUid = "uid";
   const endPoint = new RegExp(`/api/transactions/${accountUid}\/*`);
 
   beforeEach(() => {
-    store = testStore;
+    store = createTestStore();
     mockAxios = new MockAdapter(axios);
   });
 
