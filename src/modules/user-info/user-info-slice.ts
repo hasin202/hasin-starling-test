@@ -12,7 +12,7 @@ export type UserInfo = {
   accountUidLoading: boolean;
   accountUidError: boolean;
   currency: string;
-  balance: string;
+  balance: number;
   balanceLoading: boolean;
   //dont need balance error because it will be set in the global error slice.
 };
@@ -22,7 +22,7 @@ const initialState: UserInfo = {
   accountUidLoading: true,
   accountUidError: false,
   currency: "USD",
-  balance: "$0.00",
+  balance: 0,
   balanceLoading: true,
 };
 
@@ -51,11 +51,8 @@ export const userInfoSlice = createSlice({
         getBalance.fulfilled,
         (state, action: PayloadAction<BalanceItem>) => {
           state.currency = action.payload.currency;
-          state.balance = formatBalance(
-            action.payload.minorUnits,
-            action.payload.currency
-          );
-          state.balanceLoading = false;
+          (state.balance = action.payload.minorUnits),
+            (state.balanceLoading = false);
         }
       );
     // .addCase(getBalance.rejected, (state) => {
