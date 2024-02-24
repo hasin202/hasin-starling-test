@@ -3,11 +3,15 @@ import type { AppProps } from "next/app";
 import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import BlockingError from "@/modules/blocking-error/blocking-error";
+import Balance from "@/modules/user-info/components/balance";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <BlockingError />
-      <Component {...pageProps} />
+      <div className="flex flex-col p-16">
+        <BlockingError />
+        <Balance />
+        <Component {...pageProps} />
+      </div>
     </Provider>
   );
 }
