@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userInfoReducer from "@/modules/user-info/user-info-slice";
 import transactionsReducer from "@/modules/transactions/transactions-slice";
+import savingsReducer from "@/modules/savings/savings-slice";
 
 export const reducers = {
   userInfo: userInfoReducer,
   transactionsInfo: transactionsReducer,
+  savings: savingsReducer,
 };
 
 const rootReducer = combineReducers(reducers);
