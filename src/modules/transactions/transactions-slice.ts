@@ -39,8 +39,6 @@ export const getTransactions = createAsyncThunk<
 >("transactionInfo/transactions", async (accountUid, { rejectWithValue }) => {
   const maxDate = new Date();
   const minDate = new Date(maxDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-  console.log(maxDate.toISOString());
-  console.log(minDate.toISOString());
   try {
     const { data: response } = await axios.get<FeedItem[]>(
       `/api/transactions/${accountUid}`,
