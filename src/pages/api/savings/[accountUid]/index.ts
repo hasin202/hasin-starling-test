@@ -29,7 +29,7 @@ type StarlingApiSavingsPutResponse = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<SavingsGoals[] | boolean | TApiError>
+  res: NextApiResponse<SavingsGoals[] | SavingsGoals | TApiError>
 ) {
   try {
     const { accountUid } = req.query;
@@ -49,13 +49,21 @@ export default async function handler(
     //     "base64EncodedPhoto": "string"
     // }
     if (req.method === "PUT") {
-      const { data: response } =
+      const { data: newGoal } =
         await starling.put<StarlingApiSavingsPutResponse>(
           `${savingsBaseUrl}/savings-goals`,
           body
         );
-      console.log("create a savings goal");
-      return res.status(200).json(response.success);
+      //need to get all the savings goals so that the object for the created savings goal can be sent to the client
+      const { data: response } = await starling<StarlingApiGetSavingsResponse>(
+        `/account/${accountUid}/savings-goals`
+      );
+      //filter all savings goals for the created one
+      const createdGoal = response.savingsGoalList.filter(
+        (goal) => goal.savingsGoalUid === newGoal.savingsGoalUid
+      );
+
+      return res.status(200).json(createdGoal[0]);
     }
 
     const { data: response } = await starling<StarlingApiGetSavingsResponse>(
