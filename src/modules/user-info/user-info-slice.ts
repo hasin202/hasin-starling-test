@@ -2,8 +2,8 @@ import { BalanceItem } from "@/pages/api/balance/[accountUid]";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { getTransactions } from "../transactions/transactions-slice";
+import { getSavings } from "../savings/savings-slice";
 import axios from "axios";
-import formatBalance from "./helpers/format-balance";
 
 //user info type
 export type UserInfo = {
@@ -75,6 +75,7 @@ export const getAccountUid = createAsyncThunk<
     //this means that the account uid can be set as a query param when making the API calling so that it can be consumed by the endpoint in /api
     dispatch(getBalance(response));
     dispatch(getTransactions(response));
+    dispatch(getSavings(response));
     return response;
   } catch (error) {
     return rejectWithValue("failed to get user info.");
