@@ -4,11 +4,12 @@ import formatBalance from "../helpers/format-balance";
 import BalanceSkeleton from "./balance-skeleton";
 
 const Balance = () => {
-  const { balance, currency, balanceLoading } = useSelector(
+  const { balance, currency } = useSelector(
     (state: RootState) => state.userInfo
   );
+  const { initalLoading } = useSelector((state: RootState) => state.userInfo);
 
-  if (balanceLoading) {
+  if (initalLoading) {
     return <BalanceSkeleton />;
   }
 

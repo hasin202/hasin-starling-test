@@ -2,8 +2,10 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userInfoReducer from "@/modules/user-info/user-info-slice";
 import transactionsReducer from "@/modules/transactions/transactions-slice";
 import savingsReducer from "@/modules/savings/savings-slice";
+import globalErrorReducer from "@/modules/blocking-error/global-error-slice";
 
 export const reducers = {
+  globalError: globalErrorReducer,
   userInfo: userInfoReducer,
   transactionsInfo: transactionsReducer,
   savings: savingsReducer,

@@ -11,13 +11,17 @@ import {
 import { Button } from "@/components/ui/button";
 
 const BlockingError = () => {
-  const { accountUidError } = useSelector((state: RootState) => state.userInfo);
+  const { accountUidError, otherErrors, otherErrorsExplination } = useSelector(
+    (state: RootState) => state.globalError
+  );
+  //if there is an error while getting the accountUid or any other api call then display this modal
+  //ONLY FOR INITIAL LOAD.
   return (
-    accountUidError && (
-      <div>
-        <AlertDialog open={accountUidError}>
-          <AlertDialogContent>
-            <AlertDialogHeader>Oops. Something went wrong.</AlertDialogHeader>
+    (accountUidError || otherErrors) && (
+      <AlertDialog open={accountUidError || otherErrors}>
+        <AlertDialogContent className="w-[300px] rounded-lg">
+          <AlertDialogHeader>Oops. Something went wrong.</AlertDialogHeader>
+          {accountUidError && (
             <AlertDialogDescription>
               This is most likely because you forgot to create a .env file and
               set a ACCESS_TOKEN variable.
@@ -25,12 +29,23 @@ const BlockingError = () => {
               <br />
               Please make sure you set one then try again.
             </AlertDialogDescription>
-            <AlertDialogFooter>
-              <Button onClick={() => location.reload()}>Try Again</Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+          )}
+          {otherErrors && (
+            <AlertDialogDescription>
+              <p>Specifically, it looks like something went wrong when:</p>
+              <br />
+              <ul className="ml-12 list-disc">
+                {otherErrorsExplination.map((error) => {
+                  return <li>Getting {error}</li>;
+                })}
+              </ul>
+            </AlertDialogDescription>
+          )}
+          <AlertDialogFooter>
+            <Button onClick={() => location.reload()}>Try Again</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     )
   );
 };

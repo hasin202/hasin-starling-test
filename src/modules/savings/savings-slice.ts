@@ -3,6 +3,7 @@ import { SavingsGoals } from "@/pages/api/savings/[accountUid]";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { ClientSideReject } from "../blocking-error/global-error-slice";
 
 export type TArgs<T> = {
   accountUid: string;
@@ -125,7 +126,7 @@ export const savingsSlice = createSlice({
 export const getSavings = createAsyncThunk<
   SavingsGoals[],
   string,
-  { rejectValue: string }
+  { rejectValue: ClientSideReject }
 >("savings/getSavings", async (accountUid, { rejectWithValue }) => {
   try {
     const { data: response } = await axios.get<SavingsGoals[]>(
@@ -133,7 +134,7 @@ export const getSavings = createAsyncThunk<
     );
     return response;
   } catch (error) {
-    return rejectWithValue("failed at savings");
+    return rejectWithValue({ error: true, where: "savings" });
   }
 });
 

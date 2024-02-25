@@ -15,10 +15,11 @@ const NoTransactions = () => {
 };
 
 const Transactions = () => {
-  const { feedItems, transactionsLoading, roundUpAmount } = useSelector(
+  const { feedItems, roundUpAmount } = useSelector(
     (state: RootState) => state.transactionsInfo
   );
-  if (transactionsLoading) return <TransactionSkeleton />;
+  const { initalLoading } = useSelector((state: RootState) => state.userInfo);
+  if (initalLoading) return <TransactionSkeleton />;
   if (feedItems.length === 0) return <NoTransactions />;
   return (
     <div className="flex flex-col gap-4">
