@@ -24,7 +24,8 @@ export const transactionInfoSlice = createSlice({
     builder.addCase(
       getTransactions.fulfilled,
       (state, action: PayloadAction<FeedItem[]>) => {
-        state.feedItems = action.payload;
+        //order the array from most recent to oldest
+        state.feedItems = action.payload.reverse();
         state.roundUpAmount = calculateTotalRoundUpAmount(state.feedItems);
         state.transactionsLoading = false;
       }
