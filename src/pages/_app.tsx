@@ -7,7 +7,7 @@ import Balance from "@/modules/user-info/components/balance";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <div className="flex flex-col p-16">
+      <div className="flex flex-col py-16 px-12">
         <BlockingError />
         <Balance />
         <Component {...pageProps} />
