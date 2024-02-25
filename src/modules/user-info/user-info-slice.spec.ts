@@ -7,30 +7,14 @@ import {
   removeBalance,
 } from "./user-info-slice";
 import { AppStore, createTestStore } from "@/redux/testStore";
-
-const initialState = {
-  accountUid: "",
-  accountUidLoading: true,
-  accountUidError: false,
-  currency: "USD",
-  balance: 0,
-  balanceLoading: true,
-};
+import { mockFeedItems } from "../transactions/helpers/mocks";
+import { mockSavingsGoals } from "../savings/helpers/mocks";
 
 describe("accountUid reducer", () => {
   let store: AppStore;
 
   beforeEach(() => {
     store = createTestStore();
-  });
-
-  it("should set the initial state properly", () => {
-    expect(store.getState().userInfo).toEqual(initialState);
-  });
-
-  it("should set accountUidError to true on dispatch of userInfo/accountErr", () => {
-    store.dispatch({ type: "userInfo/accountErr" });
-    expect(store.getState().userInfo.accountUidError).toBe(true);
   });
 
   it("should add the correct value to the balance", () => {
@@ -44,7 +28,7 @@ describe("accountUid reducer", () => {
   });
 });
 
-describe("accountUid Thunk", () => {
+describe("accountUid Thunk & global errors", () => {
   let store: AppStore;
   let mockAxios: MockAdapter;
   beforeEach(() => {
@@ -53,21 +37,56 @@ describe("accountUid Thunk", () => {
     mockAxios = new MockAdapter(axios);
   });
 
-  it("should set error to true and leave other states if the request fails", async () => {
-    mockAxios.onGet("/api/account-uid").reply(400, "oops");
-
-    await store.dispatch(getAccountUid());
-    expect(store.getState().userInfo.accountUid).toBe("");
-    expect(store.getState().userInfo.accountUidLoading).toBe(true);
-    expect(store.getState().userInfo.accountUidError).toBe(true);
-  });
-
   it("should set states correctly if response is ok", async () => {
     mockAxios.onGet("/api/account-uid").reply(200, "uid");
 
+    mockAxios
+      .onGet(`/api/balance/uid`)
+      .reply(200, { currency: "GBP", minorUnits: 1234 });
+    mockAxios.onGet(`/api/transactions/uid`).reply(200, mockFeedItems);
+    mockAxios.onGet(`/api/savings/uid`).reply(200, mockSavingsGoals);
+
     await store.dispatch(getAccountUid());
     expect(store.getState().userInfo.accountUid).toBe("uid");
-    expect(store.getState().userInfo.accountUidLoading).toBe(false);
+    expect(store.getState().userInfo.initalLoading).toBe(false);
+    expect(store.getState().globalError.accountUidError).toBe(false);
+    expect(store.getState().globalError.otherErrors).toBe(false);
+    expect(store.getState().globalError.otherErrorsExplination).toEqual([]);
+  });
+
+  it("should set states correctly if account Uid fails, specifically error states", async () => {
+    mockAxios.onGet("/api/account-uid").reply(400, "oops");
+
+    mockAxios
+      .onGet(`/api/balance/uid`)
+      .reply(200, { currency: "GBP", minorUnits: 1234 });
+    mockAxios.onGet(`/api/transactions/uid`).reply(200, mockFeedItems);
+    mockAxios.onGet(`/api/savings/uid`).reply(200, mockSavingsGoals);
+
+    await store.dispatch(getAccountUid());
+    expect(store.getState().userInfo.accountUid).toBe("");
+    expect(store.getState().userInfo.initalLoading).toBe(true);
+    expect(store.getState().globalError.accountUidError).toBe(true);
+    expect(store.getState().globalError.otherErrors).toBe(false);
+    expect(store.getState().globalError.otherErrorsExplination).toEqual([]);
+  });
+
+  it("should set states correctly if response fails", async () => {
+    mockAxios.onGet("/api/account-uid").reply(200, "uid");
+
+    mockAxios.onGet(`/api/balance/uid`).reply(400, "oops");
+    mockAxios.onGet(`/api/transactions/uid`).reply(200, mockFeedItems);
+    mockAxios.onGet(`/api/savings/uid`).reply(400, "oops");
+
+    await store.dispatch(getAccountUid());
+    expect(store.getState().userInfo.accountUid).toBe("");
+    expect(store.getState().userInfo.initalLoading).toBe(true);
+    expect(store.getState().globalError.accountUidError).toBe(false);
+    expect(store.getState().globalError.otherErrors).toBe(true);
+    expect(store.getState().globalError.otherErrorsExplination).toEqual([
+      "balance",
+      "savings",
+    ]);
   });
 });
 

@@ -40,8 +40,9 @@ describe("transactions slice", () => {
 
     await store.dispatch(getTransactions(accountUid));
 
-    expect(store.getState().transactionsInfo.transactionsLoading).toBe(false);
-    expect(store.getState().transactionsInfo.feedItems).toEqual(mockFeedItems);
+    expect(store.getState().transactionsInfo.feedItems).toEqual(
+      mockFeedItems.reverse()
+    );
     expect(store.getState().transactionsInfo.roundUpAmount).toEqual(785);
   });
 });

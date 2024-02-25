@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { calculateTotalRoundUpAmount } from "./helpers/transaction-helpers";
+import { ClientSideReject } from "../blocking-error/global-error-slice";
 
 export type TransactionsInfo = {
   feedItems: FeedItem[];
@@ -21,22 +22,26 @@ export const transactionInfoSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      getTransactions.fulfilled,
-      (state, action: PayloadAction<FeedItem[]>) => {
-        //order the array from most recent to oldest
-        state.feedItems = action.payload.reverse();
-        state.roundUpAmount = calculateTotalRoundUpAmount(state.feedItems);
-        state.transactionsLoading = false;
-      }
-    );
+    builder
+      .addCase(
+        getTransactions.fulfilled,
+        (state, action: PayloadAction<FeedItem[]>) => {
+          //order the array from most recent to oldest
+          state.feedItems = action.payload.reverse();
+          state.roundUpAmount = calculateTotalRoundUpAmount(state.feedItems);
+          state.transactionsLoading = false;
+        }
+      )
+      .addCase(getTransactions.pending, (state) => {
+        state.transactionsLoading = true;
+      });
   },
 });
 
 export const getTransactions = createAsyncThunk<
   FeedItem[],
   string,
-  { rejectValue: string }
+  { rejectValue: ClientSideReject }
 >("transactionInfo/transactions", async (accountUid, { rejectWithValue }) => {
   const maxDate = new Date();
   const minDate = new Date(maxDate.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -52,7 +57,7 @@ export const getTransactions = createAsyncThunk<
     );
     return response;
   } catch (error) {
-    return rejectWithValue("failed at balance");
+    return rejectWithValue({ error: true, where: "transactions" });
   }
 });
 
