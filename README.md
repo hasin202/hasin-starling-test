@@ -2,9 +2,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 # Hasin Mahmood - Starling Graduate Software Engineer Tech Test
 
+A quick video running through the entire project: https://youtu.be/I28c47rK5iA
+
 #### Techstack:
 
-`TypeScript, NextJS, shadcn, jest`
+`TypeScript, NextJS, Redux, shadcn, jest`
 
 ### How to run locally:
 
@@ -21,9 +23,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 If you have followed these steps correctly you should see something like this (make sure you simulate some transactions for your user within your created sandbox!):
 
-
 ![example home page](public/image-1.png)
-
 
 ### What the site provides:
 
