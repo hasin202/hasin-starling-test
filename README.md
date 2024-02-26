@@ -21,7 +21,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 If you have followed these steps correctly you should see something like this (make sure you simulate some transactions for your user within your created sandbox!):
 
+
 ![example home page](public/image-1.png)
+
 
 ### What the site provides:
 
