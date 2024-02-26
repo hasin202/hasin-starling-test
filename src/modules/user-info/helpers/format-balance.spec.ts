@@ -1,4 +1,4 @@
-import formatBalance from "./format-balance";
+import formatBalance, { currencyToSymbol } from "./format-balance";
 
 describe("format user balance", () => {
   it("should prepend balance with £ if currency GBP", () => {
@@ -24,5 +24,20 @@ describe("format user balance", () => {
   it("should return a single digit minor units correctly", () => {
     const formattedBalance = formatBalance(1, "GBP");
     expect(formattedBalance).toEqual("£0.01");
+  });
+});
+
+describe("currencyToSymbol", () => {
+  it("should return £ if currency is GBP", () => {
+    const symbol = currencyToSymbol("GBP");
+    expect(symbol).toBe("£");
+  });
+  it("should return $ if currency is USD", () => {
+    const symbol = currencyToSymbol("USD");
+    expect(symbol).toBe("$");
+  });
+  it("should return € if currency is EUR", () => {
+    const symbol = currencyToSymbol("EUR");
+    expect(symbol).toBe("€");
   });
 });

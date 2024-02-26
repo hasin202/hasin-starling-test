@@ -10,4 +10,11 @@ const formatBalance = (minorUnits: number, currency: string): string => {
   return "$0.00";
 };
 
+export const currencyToSymbol = (currency: string): string => {
+  if (currency === "GBP") return `£`;
+  else if (currency === "USD") return `$`;
+  else if (currency === "EUR") return `€`;
+  return "$";
+};
+
 export default formatBalance;
