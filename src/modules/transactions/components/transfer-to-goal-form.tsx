@@ -27,7 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { TArgs, transferToGoal } from "@/modules/savings/savings-slice";
-import { ThunkDispatch } from "@reduxjs/toolkit";
+import { Action, ThunkDispatch } from "@reduxjs/toolkit";
 import { BalanceItem } from "@/pages/api/balance/[accountUid]";
 import { toast } from "@/components/ui/use-toast";
 
@@ -36,7 +36,8 @@ const FormSchema = z.object({
 });
 
 const RoundUpBtn = () => {
-  const dispatch = useDispatch<ThunkDispatch<any, TArgs<BalanceItem>, any>>();
+  const dispatch =
+    useDispatch<ThunkDispatch<RootState, TArgs<BalanceItem>, Action>>();
   //Get the roundup amount from state
   const { roundUpAmount } = useSelector(
     (state: RootState) => state.transactionsInfo
