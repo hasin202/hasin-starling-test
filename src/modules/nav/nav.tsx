@@ -1,8 +1,10 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import NavSkeleton from "./nav-skeleton";
 
 const routes = [
   {
@@ -15,7 +17,10 @@ const routes = [
   },
 ];
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
+  const { initalLoading } = useSelector((state: RootState) => state.userInfo);
+
+  if (initalLoading) return <NavSkeleton />;
   return (
     <div className="w-full flex justify-between">
       <div>
@@ -23,8 +28,10 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="hidden md:flex gap-4 items-center">
-        {routes.map((r) => (
-          <Link href={r.url}>{r.name}</Link>
+        {routes.map((r, i) => (
+          <Link key={i} href={r.url}>
+            {r.name}
+          </Link>
         ))}
       </div>
       <div className="flex md:hidden">
