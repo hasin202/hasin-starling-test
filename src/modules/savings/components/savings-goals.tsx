@@ -8,7 +8,9 @@ import CreateGoalForm from "./create-goal-form";
 
 const SavingsGoals = () => {
   const { savingsGoals } = useSelector((state: RootState) => state.savings);
-  const { initalLoading } = useSelector((state: RootState) => state.userInfo);
+  const { initalLoading, accountUid } = useSelector(
+    (state: RootState) => state.userInfo
+  );
 
   if (initalLoading) return <SavingsGoalsSkeleton />;
   return (
@@ -25,7 +27,13 @@ const SavingsGoals = () => {
         {savingsGoals.length ? (
           <div className="flex flex-col gap-4">
             {savingsGoals.map((g, i) => {
-              return <IndividualGoal key={i} goalDetails={g} />;
+              return (
+                <IndividualGoal
+                  key={i}
+                  goalDetails={g}
+                  accountUid={accountUid}
+                />
+              );
             })}
           </div>
         ) : (
