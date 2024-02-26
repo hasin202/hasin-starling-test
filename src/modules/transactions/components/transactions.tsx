@@ -2,7 +2,7 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import FeedItem from "./individual-feed-item";
 import TransactionSkeleton from "./skeleton/transactions-skeleton";
-import RoundUpBtn from "./round-up-btn";
+import RoundUpBtn from "./transfer-to-goal-form";
 
 const NoTransactions = () => {
   return (

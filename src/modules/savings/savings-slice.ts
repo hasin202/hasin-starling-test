@@ -4,11 +4,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ClientSideReject } from "../blocking-error/global-error-slice";
+import { addBalance, removeBalance } from "../user-info/user-info-slice";
 
 export type TArgs<T> = {
   accountUid: string;
   savingsGoalUid?: string;
   body?: T;
+  transferAmount?: number;
 };
 
 export type TArgsDeleteGoal = {
@@ -170,13 +172,14 @@ export const transferToGoal = createAsyncThunk<
   "savings/transferToGoal",
   //need to pass in an object because only a single arg can be passed to the payload creator
   //by passing in an object we can send over more than one arg
-  async (args, { rejectWithValue }) => {
-    const { accountUid, body, savingsGoalUid } = args;
+  async (args, { dispatch, rejectWithValue }) => {
+    const { accountUid, body, savingsGoalUid, transferAmount } = args;
     try {
       await axios.put(
         `api/savings/${accountUid}/${savingsGoalUid}/transfer-in`,
         body
       );
+      if (transferAmount) dispatch(removeBalance(transferAmount));
       return true;
     } catch (error) {
       return rejectWithValue("failed to transfer amount to goal");
@@ -192,12 +195,13 @@ export const transferFromGoal = createAsyncThunk<
   "savings/transferFromGoal",
   //need to pass in an object because only a single arg can be passed to the payload creator
   //by passing in an object we can send over more than one arg
-  async (args, { rejectWithValue }) => {
-    const { accountUid, savingsGoalUid } = args;
+  async (args, { dispatch, rejectWithValue }) => {
+    const { accountUid, savingsGoalUid, transferAmount } = args;
     try {
       await axios.put(
         `api/savings/${accountUid}/${savingsGoalUid}/transfer-out`
       );
+      if (transferAmount) dispatch(addBalance(transferAmount));
       return true;
     } catch (error) {
       return rejectWithValue("failed to transfer amount to account");
