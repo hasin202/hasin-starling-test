@@ -16,6 +16,7 @@ export type TArgs<T> = {
 export type TArgsDeleteGoal = {
   accountUid: string;
   savingsGoalUid: string;
+  savedAmount: number;
 };
 
 export type CreateGoalBody = {
@@ -217,10 +218,11 @@ export const deleteGoal = createAsyncThunk<
   "savings/deleteGoal",
   //need to pass in an object because only a single arg can be passed to the payload creator
   //by passing in an object we can send over more than one arg
-  async (args, { rejectWithValue }) => {
-    const { accountUid, savingsGoalUid } = args;
+  async (args, { dispatch, rejectWithValue }) => {
+    const { accountUid, savingsGoalUid, savedAmount } = args;
     try {
       await axios.delete(`api/savings/${accountUid}/${savingsGoalUid}/delete`);
+      dispatch(addBalance(savedAmount));
       return savingsGoalUid;
     } catch (error) {
       return rejectWithValue("failed delete goal");
