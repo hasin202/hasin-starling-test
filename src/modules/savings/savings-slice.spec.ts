@@ -12,7 +12,7 @@ import { mockSavingsGoals, newSavingsGoal } from "./helpers/mocks";
 import { initialState } from "./savings-slice";
 
 const accountUid = "uid";
-const goalUid = "5301c816-4613-4a7f-8d28-9ba156c7821b";
+const goalUid = "7f7b3cec-dfdc-483d-a748-3a185423aad4";
 
 //------------------------------------------------------------------------
 describe("getSavings thunk", () => {
@@ -96,7 +96,9 @@ describe("transferToGoal thunk", () => {
 
   beforeEach(() => {
     //preload some savings goals into state so that reducers can be tested
-    store = createTestStore();
+    store = createTestStore({
+      savings: { ...initialState, savingsGoals: mockSavingsGoals },
+    });
     mockAxios = new MockAdapter(axios);
   });
 
@@ -115,10 +117,17 @@ describe("transferToGoal thunk", () => {
         accountUid: accountUid,
         body: body,
         savingsGoalUid: goalUid,
+        transferAmount: 100,
       })
     );
     expect(store.getState().savings.transferInError).toEqual(false);
     expect(store.getState().savings.transferInLoading).toEqual(false);
+    expect(
+      store
+        .getState()
+        .savings.savingsGoals.find((goal) => goal.savingsGoalUid === goalUid)
+        ?.totalSaved.minorUnits
+    ).toBe(150100);
   });
 
   it("should set states correctly when api response fails", async () => {
@@ -131,6 +140,7 @@ describe("transferToGoal thunk", () => {
         accountUid: accountUid,
         body: body,
         savingsGoalUid: goalUid,
+        transferAmount: 100,
       })
     );
     expect(store.getState().savings.transferInError).toEqual(true);
@@ -146,7 +156,9 @@ describe("transferFromGoal thunk", () => {
 
   beforeEach(() => {
     //preload some savings goals into state so that reducers can be tested
-    store = createTestStore();
+    store = createTestStore({
+      savings: { ...initialState, savingsGoals: mockSavingsGoals },
+    });
     mockAxios = new MockAdapter(axios);
   });
 
@@ -165,10 +177,17 @@ describe("transferFromGoal thunk", () => {
         accountUid: accountUid,
         body: body,
         savingsGoalUid: goalUid,
+        transferAmount: 100,
       })
     );
     expect(store.getState().savings.transferOutLoading).toEqual(false);
     expect(store.getState().savings.transferOutError).toEqual(false);
+    expect(
+      store
+        .getState()
+        .savings.savingsGoals.find((goal) => goal.savingsGoalUid === goalUid)
+        ?.totalSaved.minorUnits
+    ).toEqual(149900);
   });
 
   it("should set states correctly when api response fails", async () => {
@@ -181,6 +200,7 @@ describe("transferFromGoal thunk", () => {
         accountUid: accountUid,
         body: body,
         savingsGoalUid: goalUid,
+        transferAmount: 100,
       })
     );
     expect(store.getState().savings.transferOutError).toEqual(true);
@@ -210,6 +230,7 @@ describe("deleteGoal thunk", () => {
       deleteGoal({
         accountUid: accountUid,
         savingsGoalUid: goalUid,
+        savedAmount: 100,
       })
     );
     expect(store.getState().savings.deleteGoalLoading).toEqual(false);
@@ -228,6 +249,7 @@ describe("deleteGoal thunk", () => {
       deleteGoal({
         accountUid: accountUid,
         savingsGoalUid: goalUid,
+        savedAmount: 100,
       })
     );
     expect(store.getState().savings.deleteGoalLoading).toEqual(false);

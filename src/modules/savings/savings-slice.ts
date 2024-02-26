@@ -6,11 +6,16 @@ import axios from "axios";
 import { ClientSideReject } from "../blocking-error/global-error-slice";
 import { addBalance, removeBalance } from "../user-info/user-info-slice";
 
-export type TArgs<T> = {
+export type TArgsTransfer<T> = {
   accountUid: string;
-  savingsGoalUid?: string;
-  body?: T;
-  transferAmount?: number;
+  savingsGoalUid: string;
+  body: T;
+  transferAmount: number;
+};
+
+export type TArgsCreateGoal<T> = {
+  accountUid: string;
+  body: T;
 };
 
 export type TArgsDeleteGoal = {
@@ -88,9 +93,18 @@ export const savingsSlice = createSlice({
       .addCase(transferToGoal.pending, (state) => {
         state.transferInLoading = true;
       })
-      .addCase(transferToGoal.fulfilled, (state) => {
-        state.transferInLoading = false;
-      })
+      .addCase(
+        transferToGoal.fulfilled,
+        (state, action: PayloadAction<{ goalUid: string; amount: number }>) => {
+          const { goalUid, amount } = action.payload;
+          const goal = state.savingsGoals.find(
+            (goal) => goal.savingsGoalUid === goalUid
+          );
+          if (goal)
+            goal.totalSaved.minorUnits = goal.totalSaved.minorUnits + amount;
+          state.transferInLoading = false;
+        }
+      )
       .addCase(transferToGoal.rejected, (state) => {
         state.transferInError = true;
         state.transferInLoading = false;
@@ -99,9 +113,18 @@ export const savingsSlice = createSlice({
       .addCase(transferFromGoal.pending, (state) => {
         state.transferOutLoading = true;
       })
-      .addCase(transferFromGoal.fulfilled, (state) => {
-        state.transferOutLoading = false;
-      })
+      .addCase(
+        transferFromGoal.fulfilled,
+        (state, action: PayloadAction<{ goalUid: string; amount: number }>) => {
+          const { goalUid, amount } = action.payload;
+          const goal = state.savingsGoals.find(
+            (goal) => goal.savingsGoalUid === goalUid
+          );
+          if (goal)
+            goal.totalSaved.minorUnits = goal.totalSaved.minorUnits - amount;
+          state.transferOutLoading = false;
+        }
+      )
       .addCase(transferFromGoal.rejected, (state) => {
         state.transferOutError = true;
         state.transferOutLoading = false;
@@ -145,14 +168,14 @@ export const getSavings = createAsyncThunk<
 //because of this need to pass the params in the form {accountUid: , body: }
 export const createGoal = createAsyncThunk<
   SavingsGoals,
-  TArgs<CreateGoalBody>,
+  TArgsCreateGoal<CreateGoalBody>,
   { rejectValue: string }
 >(
   "savings/createGoal",
   //need to pass in an object because only a single arg can be passed to the payload creator
   //by passing in an object we can send over more than one arg
   async (args, { rejectWithValue }) => {
-    const { accountUid, body } = args as TArgs<CreateGoalBody>;
+    const { accountUid, body } = args;
     try {
       const { data: response } = await axios.put(
         `api/savings/${accountUid}`,
@@ -166,8 +189,8 @@ export const createGoal = createAsyncThunk<
 );
 
 export const transferToGoal = createAsyncThunk<
-  boolean,
-  TArgs<BalanceItem>,
+  { goalUid: string; amount: number },
+  TArgsTransfer<BalanceItem>,
   { rejectValue: string }
 >(
   "savings/transferToGoal",
@@ -181,7 +204,7 @@ export const transferToGoal = createAsyncThunk<
         body
       );
       if (transferAmount) dispatch(removeBalance(transferAmount));
-      return true;
+      return { goalUid: savingsGoalUid, amount: transferAmount };
     } catch (error) {
       return rejectWithValue("failed to transfer amount to goal");
     }
@@ -189,8 +212,8 @@ export const transferToGoal = createAsyncThunk<
 );
 
 export const transferFromGoal = createAsyncThunk<
-  boolean,
-  TArgs<BalanceItem>,
+  { goalUid: string; amount: number },
+  TArgsTransfer<BalanceItem>,
   { rejectValue: string }
 >(
   "savings/transferFromGoal",
@@ -203,7 +226,7 @@ export const transferFromGoal = createAsyncThunk<
         `api/savings/${accountUid}/${savingsGoalUid}/transfer-out`
       );
       if (transferAmount) dispatch(addBalance(transferAmount));
-      return true;
+      return { goalUid: savingsGoalUid, amount: transferAmount };
     } catch (error) {
       return rejectWithValue("failed to transfer amount to account");
     }

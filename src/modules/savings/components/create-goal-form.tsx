@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { CreateGoalBody, TArgs, createGoal } from "../savings-slice";
+import { CreateGoalBody, TArgsCreateGoal, createGoal } from "../savings-slice";
 import { Action, ThunkDispatch } from "@reduxjs/toolkit";
 import { toast } from "@/components/ui/use-toast";
 import { currencyToSymbol } from "@/modules/user-info/helpers/format-balance";
@@ -32,7 +32,9 @@ const FormSchema = z.object({
 
 const CreateGoalForm = () => {
   const dispatch =
-    useDispatch<ThunkDispatch<RootState, TArgs<CreateGoalBody>, Action>>();
+    useDispatch<
+      ThunkDispatch<RootState, TArgsCreateGoal<CreateGoalBody>, Action>
+    >();
   const { currency, accountUid } = useSelector(
     (state: RootState) => state.userInfo
   );
