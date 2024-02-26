@@ -4,6 +4,8 @@ import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import BlockingError from "@/modules/blocking-error/blocking-error";
 import Balance from "@/modules/user-info/components/balance";
+import { Toaster } from "@/components/ui/toaster";
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
@@ -12,6 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Balance />
         <Component {...pageProps} />
       </div>
+      <Toaster />
     </Provider>
   );
 }
