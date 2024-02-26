@@ -19,7 +19,7 @@ const BlockingError = () => {
   return (
     (accountUidError || otherErrors) && (
       <AlertDialog open={accountUidError || otherErrors}>
-        <AlertDialogContent className="w-[300px] rounded-lg">
+        <AlertDialogContent className="w-[300px] md:w-[500px] rounded-lg">
           <AlertDialogHeader>Oops. Something went wrong.</AlertDialogHeader>
           {accountUidError && (
             <AlertDialogDescription>

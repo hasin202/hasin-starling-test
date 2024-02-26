@@ -95,53 +95,60 @@ const RoundUpBtn = () => {
         <Button>Round Up</Button>
       </SheetTrigger>
       {savingsGoals.length > 0 ? (
-        <SheetContent side={"bottom"} className="px-12 flex flex-col gap-4">
-          <div className="flex w-full justify-between">
-            <SheetHeader>Weekly round up:</SheetHeader>
-            <SheetHeader>{formatBalance(roundUpAmount, currency)}</SheetHeader>
-          </div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-6"
-            >
-              <FormField
-                control={form.control}
-                name="savingsName"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a goal" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {savingsGoals.map((goal, i) => (
-                          <SelectItem key={i} value={goal.savingsGoalUid}>
-                            {goal.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                type="submit"
-                //if the api call is pending then disable the button
-                disabled={transferInLoading}
-                className="w-full disabled:bg-teal-800"
+        <SheetContent
+          side={"bottom"}
+          className="px-12 flex w-full justify-center"
+        >
+          <div className="flex flex-col gap-4 w-[400px] md:w-[600px] lg:w-[800px]">
+            <div className="flex w-full justify-between">
+              <SheetHeader>Weekly round up:</SheetHeader>
+              <SheetHeader>
+                {formatBalance(roundUpAmount, currency)}
+              </SheetHeader>
+            </div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-6"
               >
-                Transfer
-              </Button>
-            </form>
-          </Form>
+                <FormField
+                  control={form.control}
+                  name="savingsName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a goal" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {savingsGoals.map((goal, i) => (
+                            <SelectItem key={i} value={goal.savingsGoalUid}>
+                              {goal.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  //if the api call is pending then disable the button
+                  disabled={transferInLoading}
+                  className="w-full disabled:bg-teal-800"
+                >
+                  Transfer
+                </Button>
+              </form>
+            </Form>
+          </div>
         </SheetContent>
       ) : (
         <CreateGoalForm />
