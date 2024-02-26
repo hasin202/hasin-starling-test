@@ -18,14 +18,16 @@ const Transactions = () => {
   const { feedItems, roundUpAmount } = useSelector(
     (state: RootState) => state.transactionsInfo
   );
-  const { initalLoading } = useSelector((state: RootState) => state.userInfo);
+  const { initalLoading, balance } = useSelector(
+    (state: RootState) => state.userInfo
+  );
   if (initalLoading) return <TransactionSkeleton />;
   if (feedItems.length === 0) return <NoTransactions />;
   return (
     <div className="flex flex-col gap-4">
       <p className="font-light">Transactions</p>
       {/*If the users has transactions but they're all incoming or the roundup is 0 the roundup amount btn will be hidden */}
-      {roundUpAmount && <RoundUpBtn />}
+      {roundUpAmount && roundUpAmount < balance && <RoundUpBtn />}
       <div>
         {feedItems.map((feedItem, i) => (
           <FeedItem key={i} feedItem={feedItem} id={i} feedItems={feedItems} />
