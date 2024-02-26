@@ -18,7 +18,7 @@ export type TArgsDeleteGoal = {
   savingsGoalUid: string;
 };
 
-type CreateGoalBody = {
+export type CreateGoalBody = {
   name: string;
   currency: string;
   target: BalanceItem;
@@ -151,7 +151,7 @@ export const createGoal = createAsyncThunk<
   //need to pass in an object because only a single arg can be passed to the payload creator
   //by passing in an object we can send over more than one arg
   async (args, { rejectWithValue }) => {
-    const { accountUid, body } = args;
+    const { accountUid, body } = args as TArgs<CreateGoalBody>;
     try {
       const { data: response } = await axios.put(
         `api/savings/${accountUid}`,

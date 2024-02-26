@@ -3,6 +3,8 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import IndividualGoal from "./individual-goal";
 import SavingsGoalsSkeleton from "./skeleton/savings-goal-skelton";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import CreateGoalForm from "./create-goal-form";
 
 const SavingsGoals = () => {
   const { savingsGoals } = useSelector((state: RootState) => state.savings);
@@ -14,7 +16,12 @@ const SavingsGoals = () => {
     <div className="flex flex-col gap-4">
       <p className="font-light">Savings Goals</p>
       <div className="flex flex-col flex-grow gap-4">
-        <Button>Make a new savings goals</Button>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className="w-full">Make a new savings goals</Button>
+          </SheetTrigger>
+          <CreateGoalForm />
+        </Sheet>
         {savingsGoals.length ? (
           <div className="flex flex-col gap-4">
             {savingsGoals.map((g, i) => {
