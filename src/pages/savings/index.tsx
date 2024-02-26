@@ -1,5 +1,11 @@
+import SavingsGoals from "@/modules/savings/components/savings-goals";
+
 const Savings = () => {
-  return <p>savings</p>;
+  return (
+    <main>
+      <SavingsGoals />
+    </main>
+  );
 };
 
 export default Savings;
