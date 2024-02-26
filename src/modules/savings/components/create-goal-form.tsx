@@ -74,65 +74,67 @@ const CreateGoalForm = () => {
   };
 
   return (
-    <SheetContent side={"bottom"} className="px-12 flex flex-col gap-4">
-      <SheetHeader className="text-left">Create a new goal</SheetHeader>
-      <hr />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-6"
-        >
-          <FormField
-            control={form.control}
-            name="savingsName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Savings Goal Name:</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your goals name" {...field} />
-                </FormControl>
-                {form.formState.errors.savingsName && (
-                  <p className="text-xs text-red-800">
-                    {form.formState.errors.savingsName.message}
-                  </p>
-                )}
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="target"
-            render={() => (
-              <FormItem>
-                <FormLabel>Savings Target:</FormLabel>
-                <FormControl>
-                  <div className="flex items-center">
-                    <div className="bg-stone-800 h-[40px] w-[25px] flex items-center justify-center rounded-tl rounded-bl">
-                      {currencyToSymbol(currency)}
-                    </div>
-                    <Input
-                      className="rounded-tl-none rounded-bl-none"
-                      type="number"
-                      step=".01"
-                      {...form.register("target", {
-                        setValueAs: (value) => Number(value),
-                      })}
-                    />
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <Button
-            type="submit"
-            disabled={createGoalLoading}
-            className="w-full disabled:bg-teal-800"
+    <SheetContent side={"bottom"} className="px-12 flex w-full justify-center">
+      <div className="flex flex-col gap-4 w-[400px] md:w-[600px] lg:w-[800px]">
+        <SheetHeader className="text-left">Create a new goal</SheetHeader>
+        <hr />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-6"
           >
-            Create Goal
-          </Button>
-        </form>
-      </Form>
+            <FormField
+              control={form.control}
+              name="savingsName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Savings Goal Name:</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your goals name" {...field} />
+                  </FormControl>
+                  {form.formState.errors.savingsName && (
+                    <p className="text-xs text-red-800">
+                      {form.formState.errors.savingsName.message}
+                    </p>
+                  )}
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="target"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Savings Target:</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center">
+                      <div className="bg-stone-800 h-[40px] w-[25px] flex items-center justify-center rounded-tl rounded-bl">
+                        {currencyToSymbol(currency)}
+                      </div>
+                      <Input
+                        className="rounded-tl-none rounded-bl-none"
+                        type="number"
+                        step=".01"
+                        {...form.register("target", {
+                          setValueAs: (value) => Number(value),
+                        })}
+                      />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              disabled={createGoalLoading}
+              className="w-full disabled:bg-teal-800"
+            >
+              Create Goal
+            </Button>
+          </form>
+        </Form>
+      </div>
     </SheetContent>
   );
 };

@@ -64,7 +64,7 @@ const IndividualGoal: React.FC<ComponentProps> = ({
                 <Trash2 color="#ef4444" />
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="w-[300px] rounded-lg">
+            <AlertDialogContent className="w-[300px] md:w-[450px] rounded-lg">
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               </AlertDialogHeader>
@@ -75,7 +75,7 @@ const IndividualGoal: React.FC<ComponentProps> = ({
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  className="bg-red-600"
+                  className="bg-red-400"
                   onClick={() => handleDelete(savingsGoalUid)}
                 >
                   Continue

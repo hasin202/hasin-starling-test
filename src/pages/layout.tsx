@@ -22,8 +22,8 @@ function Layout({ Component }: LayoutProps) {
     return () => clearInterval(id);
   }, []);
   return (
-    <div>
-      <div className="flex flex-col py-16 px-12">
+    <div className="flex w-full justify-center">
+      <div className="flex flex-col py-16 px-12 w-[400px] md:w-[600px] lg:w-[800px]">
         <BlockingError />
         <Navbar />
         <Balance />
