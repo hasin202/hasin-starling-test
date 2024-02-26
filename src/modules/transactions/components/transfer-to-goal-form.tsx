@@ -30,6 +30,7 @@ import { TArgs, transferToGoal } from "@/modules/savings/savings-slice";
 import { Action, ThunkDispatch } from "@reduxjs/toolkit";
 import { BalanceItem } from "@/pages/api/balance/[accountUid]";
 import { toast } from "@/components/ui/use-toast";
+import CreateGoalForm from "@/modules/savings/components/create-goal-form";
 
 const FormSchema = z.object({
   savingsName: z.string({ required_error: "Please select a savings goal!" }),
@@ -93,54 +94,58 @@ const RoundUpBtn = () => {
       <SheetTrigger asChild>
         <Button>Round Up</Button>
       </SheetTrigger>
-      <SheetContent side={"bottom"} className="px-12 flex flex-col gap-4">
-        <div className="flex w-full justify-between">
-          <SheetHeader>Weekly round up:</SheetHeader>
-          <SheetHeader>{formatBalance(roundUpAmount, currency)}</SheetHeader>
-        </div>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
-          >
-            <FormField
-              control={form.control}
-              name="savingsName"
-              render={({ field }) => (
-                <FormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a goal" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {savingsGoals.map((goal, i) => (
-                        <SelectItem key={i} value={goal.savingsGoalUid}>
-                          {goal.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              //if the api call is pending then disable the button
-              disabled={transferInLoading}
-              className="w-full disabled:bg-teal-800"
+      {savingsGoals.length > 0 ? (
+        <SheetContent side={"bottom"} className="px-12 flex flex-col gap-4">
+          <div className="flex w-full justify-between">
+            <SheetHeader>Weekly round up:</SheetHeader>
+            <SheetHeader>{formatBalance(roundUpAmount, currency)}</SheetHeader>
+          </div>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full space-y-6"
             >
-              Transfer
-            </Button>
-          </form>
-        </Form>
-      </SheetContent>
+              <FormField
+                control={form.control}
+                name="savingsName"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a goal" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {savingsGoals.map((goal, i) => (
+                          <SelectItem key={i} value={goal.savingsGoalUid}>
+                            {goal.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                //if the api call is pending then disable the button
+                disabled={transferInLoading}
+                className="w-full disabled:bg-teal-800"
+              >
+                Transfer
+              </Button>
+            </form>
+          </Form>
+        </SheetContent>
+      ) : (
+        <CreateGoalForm />
+      )}
     </Sheet>
   );
 };
