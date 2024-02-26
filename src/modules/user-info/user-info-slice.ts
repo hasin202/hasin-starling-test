@@ -46,7 +46,7 @@ export const userInfoSlice = createSlice({
         getAccountUid.fulfilled,
         (state, action: PayloadAction<string>) => {
           state.accountUid = action.payload;
-          state.initalLoading = false;
+          // state.initalLoading = false;
         }
       )
       .addCase(
