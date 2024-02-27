@@ -29,7 +29,7 @@ describe("transactions slice", () => {
   it("should not change states if the request fails", async () => {
     mockAxios.onGet(endPoint).reply(400, "oops");
 
-    await store.dispatch(getTransactions(accountUid));
+    await store.dispatch(getTransactions({ accountUid: accountUid }));
     expect(store.getState().transactionsInfo.transactionsLoading).toBe(true);
     expect(store.getState().transactionsInfo.roundUpAmount).toBe(0);
     expect(store.getState().transactionsInfo.transactionsLoading).toBe(true);
@@ -38,7 +38,7 @@ describe("transactions slice", () => {
   it("should states properly if the api response is ok", async () => {
     mockAxios.onGet(endPoint).reply(200, mockFeedItems);
 
-    await store.dispatch(getTransactions(accountUid));
+    await store.dispatch(getTransactions({ accountUid: accountUid }));
 
     expect(store.getState().transactionsInfo.feedItems).toEqual(
       mockFeedItems.reverse()
