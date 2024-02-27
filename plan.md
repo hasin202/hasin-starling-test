@@ -6,12 +6,18 @@
 ## Requirments Analysis:
 
 - Need to have a date selector to allow the customer to choose the week they want to find the round up amount for.
-- In doing this I need to keep a record of the weeks that have already been rounded up so that the customer wont be able to round up twice for the same week.
+  <strike>- In doing this I need to keep a record of the weeks that have already been rounded up so that the customer wont be able to round up twice for the same week.
 - I also need to make sure that the customer can only select one day each week to simplify the problem. Ie they should only be able to select mondays.
 
   - This is becuase say a customer rounds up for the 8th of Feb. If they are then able select the 9th of Feb a lot of additional logic is required to enusre only the round up for the 9th of Feb is displayed.
 
-    But by only allowing them to select one day a week there is no need to worry about situation occuring.
+    But by only allowing them to select one day a week there is no need to worry about situation occuring.</strike>
+
+    Thinking about it now this wasn't the best way to think about the problem. What if the user wants to transfer the roundup amount to multiple savings goals. If they want to do this then they should be able to.
+
+    Because of this realisation there is no need to keep track of which weeks they have rounded up for or limit the date picker selection.
+
+    This decision leads to a better ux and simplifies the logic significantly.
 
 - I need to prompt the customer to make a savings goal if they don't have one
 

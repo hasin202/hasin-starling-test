@@ -4,6 +4,17 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 A quick video running through the entire project: https://youtu.be/I28c47rK5iA
 
+<hr />
+
+### Latest update:
+
+- A date picker for the user to select the starting date from when they want to view transactions.
+- Depending on the date they choose they will see their transactions for that given week (the max date is set inside the slice)
+- If they have no transactions for a selected week this will be told to them.
+- The roundup amount dynmaically updates depending on what date they have selected, working out the amount for that given week.
+
+<hr />
+
 #### Techstack:
 
 `TypeScript, NextJS, Redux, shadcn, jest`
@@ -20,6 +31,7 @@ A quick video running through the entire project: https://youtu.be/I28c47rK5iA
 - Run `npm add` to install dependencies
 - Run `npm run dev` to start a local server
 - Open up your browser and navigate to the url you see in your terimnal. Most times this is `http://localhost:3000/`
+- To run unit tests run `npm test`
 
 If you have followed these steps correctly you should see something like this (make sure you simulate some transactions for your user within your created sandbox!):
 
@@ -34,9 +46,12 @@ If you have followed these steps correctly you should see something like this (m
   - If they have savings goals they will be able to select from them and then transfer the roundup the one they choose.
 - A navigation bar to switch between viewing the last weeks transactions or their savings goals.
 - If the user navigates to the savings page with the nav bar:
+
   - All of their goals and their respective balances will be shown.
   - A button to create a new savings goal will be shown.
   - For each given savings goal they will have the option to delete them, BUT before they do an alert dialog will appear confirming if they want to go ahead.
+
+- A responsive UI
 - Robust error handling:
 
   - If there is an error when getting a users balance, transactions, or savings goals a blocking error message will be shown telling the user exactly where the site failed, even giving them a button to try again.
@@ -47,8 +62,4 @@ If you have followed these steps correctly you should see something like this (m
 
 ### Extra functionality that can be added:
 
-- A way to select a different time range rather than just the last week of transactions. I discussed how I would go about implmenting this in my [plan](/plan.md).
-
-  (I ultimatley decided that it wasn't neccessary for this version of the site as with the sandbox api you can only simulate transactions for the past 2 days, so to even test this feature I would have make sure I consistently simulated transactions for 7 days)
-
-- A way for the user to transfer money from their savings goal back to their account. To do this all you need to do is render a sheet with a form allowing the user to enter the amount they want to transfer back (I have already written the endpoint and redux thunks for this)
+- A way for the user to transfer money from their savings goal back to their account. To do this all you need to do is render a sheet with a form allowing the user to enter the amount they want to transfer back (I have already written the endpoint and redux thunks for this).
