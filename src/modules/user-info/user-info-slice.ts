@@ -76,7 +76,7 @@ export const getAccountUid = createAsyncThunk<
       //pass the account uid as a param to the getBalance, getTransactions thunk
       //this means that the account uid can be set as a query param when making the API calling so that it can be consumed by the endpoint in /api
       dispatch(getBalance(response)),
-      dispatch(getTransactions(response)),
+      dispatch(getTransactions({ accountUid: response })),
       dispatch(getSavings(response)),
     ])
       //promise.allSettled returns a lot of data, not just the resolve/reject value
