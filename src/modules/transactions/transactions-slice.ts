@@ -40,17 +40,19 @@ export const transactionInfoSlice = createSlice({
 
 export const getTransactions = createAsyncThunk<
   FeedItem[],
-  { accountUid: string; selectedMinDate?: Date },
+  { accountUid: string; selectedMaxDate?: Date },
   { rejectValue: ClientSideReject }
 >("transactionInfo/transactions", async (args, { rejectWithValue }) => {
-  const { accountUid, selectedMinDate } = args;
+  const { accountUid, selectedMaxDate } = args;
   console.log(accountUid);
 
   let maxDate: Date = new Date();
   let minDate: Date = new Date(maxDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-  if (selectedMinDate != undefined) {
-    minDate = selectedMinDate;
-    maxDate = new Date(minDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+  if (selectedMaxDate != undefined) {
+    maxDate = selectedMaxDate;
+    minDate = new Date(maxDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+    console.log(minDate);
+    console.log(selectedMaxDate);
   }
   try {
     const { data: response } = await axios.get<FeedItem[]>(

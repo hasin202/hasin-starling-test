@@ -33,7 +33,7 @@ const Transactions = () => {
       ) : (
         <>
           {/*If the users has transactions but they're all incoming or the roundup is 0 the roundup amount btn will be hidden */}
-          {roundUpAmount && roundUpAmount < balance && <RoundUpBtn />}
+          {0 < roundUpAmount && roundUpAmount < balance && <RoundUpBtn />}
           {transactionsLoading ? (
             <TransactionSkeleton />
           ) : (
