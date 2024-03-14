@@ -30,8 +30,15 @@ const DatePicker = () => {
   const { accountUid } = useSelector((state: RootState) => state.userInfo);
 
   useEffect(() => {
+    //need to set current time other wise the date object will be set to the very start of the selected day.
+    //this isnt ideal as if a customer made a transaction on that day they would only be able to see it if they chose the
+    //current date + 1 day
+    //appending the current time means that selecting that date will give all of the transactions up to the current date time
+
+    const now = new Date();
+    date?.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
     dispatch(
-      getTransactions({ accountUid: accountUid, selectedMinDate: date })
+      getTransactions({ accountUid: accountUid, selectedMaxDate: date })
     );
   }, [date]);
 
@@ -45,7 +52,7 @@ const DatePicker = () => {
             !date && "text-muted-foreground"
           )}
         >
-          {date ? format(date, "PPP") : <span>Week starting</span>}
+          {date ? format(date, "PPP") : <span>Week ending</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

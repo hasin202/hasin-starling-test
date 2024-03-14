@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import NavSkeleton from "./nav-skeleton";
+import { usePathname } from "next/navigation";
 
 const routes = [
   {
@@ -19,6 +20,7 @@ const routes = [
 
 const Navbar = () => {
   const { initalLoading } = useSelector((state: RootState) => state.userInfo);
+  const currentPath = usePathname();
 
   if (initalLoading) return <NavSkeleton />;
   return (
@@ -29,7 +31,15 @@ const Navbar = () => {
 
       <div className="hidden md:flex gap-4 items-center">
         {routes.map((r, i) => (
-          <Link key={i} href={r.url}>
+          <Link
+            key={i}
+            href={r.url}
+            className={
+              currentPath === r.url
+                ? "underline underline-offset-4 decoration-teal-200"
+                : ""
+            }
+          >
             {r.name}
           </Link>
         ))}
